@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Drug Interaction</title>
+  <link rel="stylesheet" href="https://code.highcharts.com/css/highcharts.css">
+</head>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Agdasima:wght@200;300;400;500;600;700;800;900&display=swap');
+
+body {
+        font-family: 'Agdasima', sans-serif;
+        background: url('https://www.bergencriminalattorney.com/wp-content/uploads/2020/01/pills_GJN_oLP_.jpg');
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-position: center;
+        background-attachment: fixed;
+    }
+
+/* Styles for the navbar */
+.navbar {
+    background-color: #000000;
+    color: antiquewhite;
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.navbar-brand {
+    display: flex;
+    align-items: center;
+    color: antiquewhite;
+}
+
+.navbar-logo {
+    font-weight: bold;
+    margin-right: 5px;
+    text-decoration: none;
+    color: antiquewhite;
+    font-size: 30px;
+}
+
+.navbar-nav {
+    list-style-type: none;
+    display: flex;
+    margin: 0;
+    color: antiquewhite;
+    padding: 0;
+}
+
+.nav-item {
+    margin-right: 10px;
+}
+
+.nav-link {
+    text-decoration: none;
+    color: antiquewhite;
+}
+
+.nav-link:hover {
+    color: #666;
+}
+
+#chartContainer {
+  margin: 20px auto;
+  background-color: #fff;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+  text-align: center;
+  padding: 20px;
+  margin: 0;
+  background-color: #007bff;
+  color: #fff;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  font-family: 'Agdasima', sans-serif;
+}
+
+.highcharts-data-labels text {
+  font-size: 12px;
+  fill: #333;
+}
+
+.highcharts-tooltip-box {
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 10px;
+}
+
+.highcharts-tooltip-header {
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.highcharts-tooltip-point {
+  margin-bottom: 3px;
+}
+
+.highcharts-tooltip-point-key {
+  color: #666;
+}
+
+.highcharts-tooltip-point-value {
+  font-weight: bold;
+}
+</style>
+<body>
+    <div class="navbar">
+        <div class="navbar-brand">
+            <a class="navbar-logo" href="index.html">Dashboard</a>
+        </div>
+    </div>
+    <br>
+    <div id="chartContainer"></div>
+
+  <script src="https://code.highcharts.com/highcharts.js"></script>
+  <script>
+    fetch('https://rxnav.nlm.nih.gov/REST/interaction/interaction.json?rxcui=384455&sources=DrugBank')
+      .then(response => response.json())
+      .then(data => {
+        // Extract the drug interactions from the API response
+        const interactions = data.interactionTypeGroup[0].interactionType[0].interactionPair;
+    
+        // Prepare data for the line chart
+        const chartData = interactions.map(interaction => ({
+          name: interaction.interactionConcept[1].minConceptItem.name,
+          y: interaction.description.length
+        }));
+    
+        // Create the line chart using Highcharts
+        Highcharts.chart('chartContainer', {
+          chart: {
+            type: 'line' 
+          },
+          title: {
+            text: 'Drug Interaction Chart'
+          },
+          xAxis: {
+            type: 'category'
+          },
+          yAxis: {
+            title: {
+              text: 'Interaction Length'
+            }
+          },
+          series: [{
+            name: 'Interactions',
+            data: chartData
+          }]
+        });
+      })
+      .catch(error => {
+        console.error('Error:', error);
+      });
+      </script>
+    </body>
+    </html>

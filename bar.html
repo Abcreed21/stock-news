@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Column Chart</title>
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+</head>
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Agdasima:wght@200;300;400;500;600;700;800;900&display=swap');
+
+    body {
+        font-family: 'Agdasima', sans-serif;
+        background: url('https://www.mq.edu.au/__data/assets/image/0010/994924/COVID-19-updated.jpg');
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-position: center;
+        background-attachment: fixed;
+    }
+
+    /* Styles for the navbar */
+    .navbar {
+        background-color: #000000;
+        color: antiquewhite;
+        padding: 10px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .navbar-brand {
+        display: flex;
+        align-items: center;
+        color: antiquewhite;
+    }
+
+    .navbar-logo {
+        font-weight: bold;
+        margin-right: 5px;
+        text-decoration: none;
+        color: antiquewhite;
+        font-size: 30px;
+    }
+
+    .navbar-nav {
+        list-style-type: none;
+        display: flex;
+        margin: 0;
+        color: antiquewhite;
+        padding: 0;
+    }
+
+    .nav-item {
+        margin-right: 10px;
+    }
+
+    .nav-link {
+        text-decoration: none;
+        color: antiquewhite;
+    }
+
+    .nav-link:hover {
+        color: #666;
+    }
+
+    /* Styles for the chart container */
+    #container {
+        width: 100%;
+        height: 400px;
+        border: 1px solid #ccc;
+        margin-top: 20px;
+    }
+
+    label {
+        height: 20px;
+        background-color: #000;
+        width: 100px;
+        margin-right: 10px;
+        font-family: 'Agdasima', sans-serif;
+        font-size: 15px;
+        border: 1px solid #333;
+        border-radius: 4px;
+        padding: 10px;
+        color: rgb(240, 233, 233);
+        font-weight: 900;
+    }
+
+    input[type="date"] {
+        font-family: 'Agdasima', sans-serif;
+        padding: 8px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        font-size: 14px;
+    }
+
+    /* Optional: Add more styles to customize the appearance of the date picker */
+    input[type="date"]::-webkit-calendar-picker-indicator {
+        background-color: #eee;
+        padding: 4px;
+        border-radius: 4px;
+        color: #333;
+        cursor: pointer;
+    }
+
+    input[type="date"]::-webkit-inner-spin-button,
+    input[type="date"]::-webkit-outer-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+
+    input[type="date"]::-webkit-datetime-edit {
+        padding: 4px;
+    }
+
+    input[type="text"] {
+        height: 40px;
+        width: 250px;
+        margin-right: 10px;
+        font-family: 'Agdasima', sans-serif;
+        font-size: 15px;
+        border: 1px solid #333;
+        border-radius: 4px;
+        padding: 5px;
+    }
+
+    button {
+        padding: 10px 20px;
+        font-family: 'Agdasima', sans-serif;
+        font-size: 15px;
+        background-color: black;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+    button:hover {
+        background-color: #fff;
+        color: #333;
+    }
+
+    .table-container {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        grid-gap: 20px;
+
+    }
+
+    table {
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+    th,
+    td {
+        border: 1px solid black;
+        padding: 8px;
+        text-align: left;
+    }
+
+    tr {
+        background-color: #f2f2f2;
+    }
+</style>
+
+<body>
+    <div class="navbar">
+        <div class="navbar-brand">
+            <a class="navbar-logo" href="index.html">Dashboard</a>
+        </div>
+    </div>
+    <br>
+    <label for="date">Select Date:</label>
+    <input type="text" id="date" name="date" placeholder="2020-05-01">
+    <input type="text" id="country" name="country" placeholder="Enter ABBREVIATION">
+    <button onclick="fetchData()">Data</button>
+
+    <div id="container"></div>
+    <br>
+    <table>
+        <tr>
+            <th>US STATE</th>
+            <th>POSTAL ABBREVIATION</th>
+        </tr>
+        <tr>
+            <td>Alabama</td>
+            <td>AL</td>
+        </tr>
+        <tr>
+            <td>Alaska</td>
+            <td>AK</td>
+        </tr>
+        <tr>
+            <td>Arizona</td>
+            <td>AZ</td>
+        </tr>
+        <tr>
+            <td>Arkansas</td>
+            <td>AR</td>
+        </tr>
+        <tr>
+            <td>California</td>
+            <td>CA</td>
+        </tr>
+        <tr>
+            <td>Colorado</td>
+            <td>CO</td>
+        </tr>
+        <tr>
+            <td>Connecticut</td>
+            <td>CT</td>
+        </tr>
+        <tr>
+            <td>Delaware</td>
+            <td>DE</td>
+        </tr>
+        <tr>
+            <td>Florida</td>
+            <td>FL</td>
+        </tr>
+        <tr>
+            <td>Georgia</td>
+            <td>GA</td>
+        </tr>
+        <tr>
+            <td>Hawaii</td>
+            <td>HI</td>
+        </tr>
+        <tr>
+            <td>Idaho</td>
+            <td>ID</td>
+        </tr>
+        <tr>
+            <td>Illinois</td>
+            <td>IL</td>
+        </tr>
+        <tr>
+            <td>Indiana</td>
+            <td>IN</td>
+        </tr>
+        <tr>
+            <td>Iowa</td>
+            <td>IA</td>
+        </tr>
+        <tr>
+            <td>Kansas</td>
+            <td>KS</td>
+        </tr>
+        <tr>
+            <td>Kentucky</td>
+            <td>KY</td>
+        </tr>
+        <tr>
+            <td>Louisiana</td>
+            <td>LA</td>
+        </tr>
+        <tr>
+            <td>Maine</td>
+            <td>ME</td>
+        </tr>
+        <tr>
+            <td>Maryland</td>
+            <td>MD</td>
+        </tr>
+        <tr>
+            <td>Massachusetts</td>
+            <td>MA</td>
+        </tr>
+        <tr>
+            <td>Michigan</td>
+            <td>MI</td>
+        </tr>
+        <tr>
+            <td>Minnesota</td>
+            <td>MN</td>
+        </tr>
+        <tr>
+            <td>Mississippi</td>
+            <td>MS</td>
+        </tr>
+        <tr>
+            <td>Missouri</td>
+            <td>MO</td>
+        </tr>
+        <tr>
+            <td>Montana</td>
+            <td>MT</td>
+        </tr>
+        <tr>
+            <td>Nebraska</td>
+            <td>NE</td>
+        </tr>
+        <tr>
+            <td>Nevada</td>
+            <td>NV</td>
+        </tr>
+        <tr>
+            <td>New Hampshire</td>
+            <td>NH</td>
+        </tr>
+        <tr>
+            <td>New Jersey</td>
+            <td>NJ</td>
+        </tr>
+        <tr>
+            <td>New Mexico</td>
+            <td>NM</td>
+        </tr>
+        <tr>
+            <td>New York</td>
+            <td>NY</td>
+        </tr>
+        <tr>
+            <td>North Carolina</td>
+            <td>NC</td>
+        </tr>
+        <tr>
+            <td>North Dakota</td>
+            <td>ND</td>
+        </tr>
+        <tr>
+            <td>Ohio</td>
+            <td>OH</td>
+        </tr>
+        <tr>
+            <td>Oklahoma</td>
+            <td>OK</td>
+        </tr>
+        <tr>
+            <td>Oregon</td>
+            <td>OR</td>
+        </tr>
+        <tr>
+            <td>Pennsylvania</td>
+            <td>PA</td>
+        </tr>
+        <tr>
+            <td>Rhode Island</td>
+            <td>RI</td>
+        </tr>
+        <tr>
+            <td>South Carolina</td>
+            <td>SC</td>
+        </tr>
+        <tr>
+            <td>South Dakota</td>
+            <td>SD</td>
+        </tr>
+        <tr>
+            <td>Tennessee</td>
+            <td>TN</td>
+        </tr>
+        <tr>
+            <td>Texas</td>
+            <td>TX</td>
+        </tr>
+        <tr>
+            <td>Utah</td>
+            <td>UT</td>
+        </tr>
+        <tr>
+            <td>Vermont</td>
+            <td>VT</td>
+        </tr>
+        <tr>
+            <td>Virginia</td>
+            <td>VA</td>
+        </tr>
+        <tr>
+            <td>Washington</td>
+            <td>WA</td>
+        </tr>
+        <tr>
+            <td>West Virginia</td>
+            <td>WV</td>
+        </tr>
+        <tr>
+            <td>Wisconsin</td>
+            <td>WI</td>
+        </tr>
+        <tr>
+            <td>Wyoming</td>
+            <td>WY</td>
+        </tr>
+    </table>
+
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script>
+        // Function to fetch data based on selected date
+        function fetchData() {
+            const selectedDate = document.getElementById('date').value;
+            const country = document.getElementById('country').value;
+            const apiUrl = (`https://api.covidtracking.com/v1/states/${country}/${selectedDate}.json`);
+
+            fetch(apiUrl)
+                .then(response => response.json())
+                .then(data => {
+                    // Extract the required data for the column graph
+                    const positiveCases = data.positive;
+                    const recoveredCases = data.recovered;
+                    const deathCases = data.death;
+
+                    // Create the chart
+                    Highcharts.chart('container', {
+                        chart: {
+                            type: 'column',
+                            options3d: {
+                                enabled: true,
+                                alpha: 15,
+                                beta: 15,
+                                depth: 50,
+                                viewDistance: 25
+                            }
+                        },
+                        title: {
+                            text: 'COVID-19 Cases'
+                        },
+                        xAxis: {
+                            categories: ['Positive', 'Recovered', 'Death']
+                        },
+                        yAxis: {
+                            min: 0,
+                            title: {
+                                text: `COVID-19 Cases in (${country}) (${selectedDate})`
+                            }
+                        },
+                        plotOptions: {
+                            column: {
+                                stacking: 'normal'
+                            }
+                        },
+                        series: [{
+                            name: 'Cases',
+                            data: [positiveCases, recoveredCases, deathCases]
+                        }]
+                    });
+                });
+        }
+    </script>
+</body>
+
+</html>

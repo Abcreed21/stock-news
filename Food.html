@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Food</title>
+  <link rel="stylesheet" type="text/css" href="styles.css">
+</head>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Agdasima:wght@200;300;400;500;600;700;800;900&display=swap');
+
+  body {
+    font-family: 'Agdasima', sans-serif;
+    background: url('https://th.bing.com/th/id/R.99fbce3adc23196b1bdc262b57da2141?rik=gOS27UpofXHU9w&pid=ImgRaw&r=0');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+  }
+
+  /* Styles for the navbar */
+  .navbar {
+    background-color: #000000;
+    color: antiquewhite;
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .navbar-brand {
+    display: flex;
+    align-items: center;
+  }
+
+  .navbar-logo {
+    font-weight: bold;
+    margin-right: 5px;
+    text-decoration: none;
+    color: antiquewhite;
+    font-size: 20px;
+  }
+
+  .navbar-nav {
+    list-style-type: none;
+    display: flex;
+    margin: 0;
+    color: antiquewhite;
+    padding: 0;
+  }
+
+  .nav-item {
+    margin-right: 10px;
+  }
+
+  .nav-link {
+    text-decoration: none;
+    color: antiquewhite;
+  }
+
+  .nav-link:hover {
+    color: #666;
+  }
+
+  h1 {
+    text-align: center;
+  }
+
+  label {
+    font-weight: bold;
+  }
+
+  input[type="text"] {
+    height: 40px;
+    width: 250px;
+    margin-right: 10px;
+    font-family: 'Agdasima', sans-serif;
+    font-size: 15px;
+    border: 1px solid #333;
+    border-radius: 4px;
+    padding: 10px;
+  }
+
+  button {
+    padding: 10px 20px;
+    font-family: 'Agdasima', sans-serif;
+    font-size: 15px;
+    background-color: black;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+
+  button:hover {
+    background-color: #fff;
+    color: #333;
+  }
+
+  #container {
+    height: 400px;
+    margin-top: 20px;
+  }
+</style>
+
+<body>
+  <div class="navbar">
+    <div class="navbar-brand">
+      <a class="navbar-logo" href="index.html">Dashboard</a>
+    </div>
+  </div>
+  <br>
+  <input type="text" id="foodInput" placeholder="Enter food type">
+  <button onclick="fetchNutrients()">Fetch Nutrients</button>
+  <div id="chartContainer"></div>
+
+  <script src="https://code.highcharts.com/highcharts.js"></script>
+  <script>
+    document.getElementById('foodInput').addEventListener('change', function () {
+      var foodType = this.value;
+      fetchNutrients(foodType);
+    });
+
+    function fetchNutrients(foodType) {
+      // Make a request to the Nutritionix API
+      fetch('https://trackapi.nutritionix.com/v2/natural/nutrients', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-app-id': 'd35c7018',
+          'x-app-key': '9692c055cef761381f30bbc2608df1ab',
+          'x-remote-user-id': '0'
+        },
+        body: JSON.stringify({
+          query: foodType
+        })
+      })
+        .then(response => response.json())
+        .then(data => {
+          var nutrients = data.foods[0].full_nutrients;
+
+          // Create the chart
+          Highcharts.chart('chartContainer', {
+            chart: {
+              type: 'pie',
+              options3d: {
+                enabled: true,
+                alpha: 10,
+                beta: 25,
+                depth: 70
+              }
+            },
+            title: {
+              text: 'Nutrient Information for ' + foodType
+            },
+            series: [{
+              name: 'Amount',
+              data: nutrients.map(nutrient => ({
+                name: nutrient['attr_id'],
+                y: nutrient['value']
+              }))
+            }]
+          });
+        })
+        .catch(error => {
+          console.log('Error:', error);
+        });
+    }
+  </script>
+</body>
+
+</html>

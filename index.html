@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Welcome</title>
+    <link rel="stylesheet" type="text/css" href="styles.css">
+</head>
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Agdasima:wght@200;300;400;500;600;700;800;900&display=swap');
+
+    body {
+        background: url('https://th.bing.com/th/id/R.85a462ea7207e090f63423622f8745a9?rik=IE66%2bVbV3ie%2b3Q&riu=http%3a%2f%2fwww.econwriter.com%2fwp-content%2fuploads%2f2015%2f07%2fScreen-Shot-2015-07-01-at-2.03.42-PM-1024x575.png&ehk=DBxkdQPf2809B72yMBCsS4BY4rc5IKvO6Wg7XagxW%2f0%3d&risl=&pid=ImgRaw&r=0');
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-position: center;
+        background-attachment: fixed;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+        margin: 0;
+        font-family: 'Agdasima', sans-serif;
+        background-color: #f2f2f2;
+    }
+
+    h1 {
+        text-align: center;
+        color: #fff;
+        font-size: 72px;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+    }
+
+    .button-container {
+        display: flex;
+        justify-content: center;
+        margin-top: 20px;
+    }
+
+    select.dropdown {
+        font-family: 'Agdasima', sans-serif;
+        margin: 0 10px;
+        padding: 15px 30px;
+        background-color: #0a0a0a;
+        color: #fff;
+        border: none;
+        border-radius: 4px;
+        font-size: 22px;
+        box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        transition: background-color 0.3s ease;
+        cursor: pointer;
+    }
+
+    select.dropdown:hover {
+        background-color: #fbfbfb;
+        color: #0a0a0a;
+        box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.3);
+    }
+
+    select.dropdown:active {
+        background-color: #3e8e41;
+        box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.2);
+        transform: translateY(1px);
+    }
+</style>
+
+<body>
+    <h1>Welcome to Stock News</h1>
+    <div class="button-container">
+        <select class="dropdown" onchange="location = this.value;">
+            <option value="">Select Pie Chart</option>
+            <option value="pie.html">US Covid 19 History</option>
+            <option value="Food.html">Food Contains</option>
+            <option value="drug1.html">Drug Interaction</option>
+        </select>
+        <select class="dropdown" onchange="location = this.value;">
+            <option value="">Select Bar Graph</option>
+            <option value="bar.html">US Covid 19 History</option>
+            <option value="WeatherBarGraph.html">Daily Weather</option>
+        </select>
+        <select class="dropdown" onchange="location = this.value;">
+            <option value="">Select Line Graph</option>
+            <option value="drug.html">Drug Interaction</option>
+            <option value="bank.html">World Population</option>
+        </select>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Weather Bar Graph</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Agdasima:wght@200;300;400;500;600;700;800;900&display=swap');
+
+        body {
+            font-family: 'Agdasima', sans-serif;
+            background: url('https://th.bing.com/th/id/R.602d85268f6d1c801ea24643faeeefc3?rik=SzSki8sgkW%2fPjw&pid=ImgRaw&r=0');
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+
+        /* Styles for the navbar */
+        .navbar {
+            background-color: #000000;
+            color: antiquewhite;
+            padding: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .navbar-brand {
+            display: flex;
+            align-items: center;
+        }
+
+        .navbar-logo {
+            font-weight: bold;
+            margin-right: 5px;
+            text-decoration: none;
+            color: antiquewhite;
+            font-size: 20px;
+        }
+
+        .navbar-nav {
+            list-style-type: none;
+            display: flex;
+            margin: 0;
+            color: antiquewhite;
+            padding: 0;
+        }
+
+        .nav-item {
+            margin-right: 10px;
+        }
+
+        .nav-link {
+            text-decoration: none;
+            color: antiquewhite;
+        }
+
+        .nav-link:hover {
+            color: #666;
+        }
+
+        /* Styles for the chart container */
+        #chart-container {
+            margin-top: 20px;
+            height: 350px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        /* Styles for the input container */
+        #input-container {
+            margin-top: 20px;
+            font-family: 'Agdasima', sans-serif;
+        }
+
+        label {
+            display: block;
+            font-family: 'Agdasima', sans-serif;
+            margin-bottom: 5px;
+            height: 20px;
+            width: 60px;
+            font-family: 'Agdasima', sans-serif;
+            font-size: 18px;
+            border: 1px solid antiquewhite;
+            border-radius: 4px;
+            padding: 10px;
+            color: antiquewhite;
+        }
+
+        input[type="text"] {
+            height: 30px;
+            width: 110px;
+            padding: 5px;
+            border-radius: 7px;
+            font-family: 'Agdasima', sans-serif;
+            margin-bottom: 10px;
+            font-size: 20px;
+        }
+
+        #submit-btn {
+            padding: 10px 20px;
+            font-family: 'Agdasima', sans-serif;
+            font-size: 15px;
+            background-color: black;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        #submit-btn:hover {
+            background-color: #fff;
+            color: #333;
+        }
+
+        .container {
+            display: flex;
+        }
+
+        .button-container {
+            flex: 1;
+            margin: 20px 20px 20px 0;
+        }
+    </style>
+
+<body>
+    <div class="navbar">
+        <div class="navbar-brand">
+            <a class="navbar-logo" href="index.html">Dashboard</a>
+        </div>
+    </div>
+    <div id="chart-container"></div>
+    <div id="input-container">
+        <label for="city">City:</label>
+        <input type="text" id="city_name" placeholder="Enter city name">
+        <button id="submit-btn">Get Weather</button>
+    </div>
+
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/highcharts-3d.js"></script>
+    <script src="https://code.highcharts.com/modules/exporting.js"></script>
+    <script src="https://code.highcharts.com/modules/export-data.js"></script>
+    <script>
+        // Fetch weather data from the OpenWeatherMap API
+        function fetchWeatherData(city_name, callback) {
+            const apiKey = 'dca95757b29d2d18f29869261e4e6e13';
+            const url = (`https://api.openweathermap.org/data/2.5/weather?q=${city_name}&appid=${apiKey}`);
+
+            fetch(url)
+                .then((response) => response.json())
+                .then((data) => callback(data))
+                .catch((error) => console.log(error));
+        }
+
+        // Function to create the bar graph using Highcharts
+        function createBarGraph(categories, temp, humidity, pressure, feels_like, temp_min, temp_max, sea_level, windspeed, rain, clouds) {
+            Highcharts.chart('chart-container', {
+                chart: {
+                    type: 'column'
+                },
+                title: {
+                    text: 'Weather Bar Graph'
+                },
+                xAxis: {
+                    categories: categories,
+                    title: {
+                        text: 'City'
+                    }
+                },
+                yAxis: {
+                    title: {
+                        text: 'Value'
+                    }
+                },
+                series: [{
+                    name: 'Temperature',
+                    data: temp
+                }, {
+                    name: 'Humidity',
+                    data: humidity
+                }, {
+                    name: 'Pressure',
+                    data: pressure
+                }, {
+                    name: 'Feels Like',
+                    data: feels_like
+                }, {
+                    name: 'Min Temperature',
+                    data: temp_min
+                }, {
+                    name: 'Max Temperature',
+                    data: temp_max
+                }, {
+                    name: 'Sea Level',
+                    data: sea_level
+                }, {
+                    name: 'Windspeed',
+                    data: windspeed
+                }, {
+                    name: 'Rain',
+                    data: rain
+                }, {
+                    name: 'Clouds',
+                    data: clouds
+                }]
+            });
+        }
+
+        // Event listener for the submit button
+        document.getElementById('submit-btn').addEventListener('click', function (event) {
+            event.preventDefault();
+            const city_name = document.getElementById('city_name').value;
+
+            // Fetch weather data and create the graph
+            fetchWeatherData(city_name, function (data) {
+                const temperature = [data.main.temp];
+                const humidity = [data.main.humidity];
+                const pressure = [data.main.pressure];
+                const feels_like = [data.main.feels_like];
+                const temp_min = [data.main.temp_min];
+                const temp_max = [data.main.temp_max];
+                const sea_level = [data.main.sea_level];
+                const windspeed = [data.wind.speed];
+                const rain = [data.rain ? data.rain['1h'] : 0];
+                const clouds = [data.clouds.all];
+
+                createBarGraph([city_name], temperature, humidity, pressure, feels_like, temp_min, temp_max, sea_level, windspeed, rain, clouds);
+            });
+        });
+    </script>
+</body>
+
+</html>
